@@ -1,15 +1,17 @@
-# Archivo Dockerfile - Funciona aquí, funcionará allá
-# Define un contenedor PHP basado en Apache
-FROM php:8.2-apache     
+# Imagen base con PHP y Apache
+FROM php:8.2-apache
 
-# Copia el proyecto completo
+# Copiar todos los archivos del proyecto al servidor web
 COPY . /var/www/html/
+
+# Habilitar mod_rewrite (opcional pero recomendado)
+RUN a2enmod rewrite
+
+# Dar permisos básicos
 RUN chown -R www-data:www-data /var/www/html
 
-# Crea un archivo de configuración adicional
-RUN echo "Listen \${PORT}" > /etc/apache2/ports.conf
-
-# Railway requiere exponer el puerto 80 para respuesta
+# Exponer el puerto 80
 EXPOSE 80
 
+# Iniciar Apache
 CMD ["apache2-foreground"]
